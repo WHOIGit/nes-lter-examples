@@ -1,6 +1,6 @@
 # Examples of using online data produced by the NES-LTER information management system (IMS)
 
-This repository contains [example data](data) from NES-LTER along with executable code for downloading and visualizing the data in [Python](notebooks) (Jupyter), [R](R), and [MATLAB](MATLAB).
+This repository contains [example data](data) from NES-LTER along with executable code for downloading and visualizing the data in [Python](notebooks), [R](R), and [MATLAB](MATLAB).
 
 The NES-LTER IMS is under development and its current capabilities include parsing raw data and producing cleaned-up CSV data that can be read by any programming language. Raw data includes both instrument data such as CTD bottle summary files, as well as PI-provided spreadsheets. The "data cleaning" is the first part of the proposed data pipeline that would support queries and discovery, access to data, and export to external repositories, all through RESTful web APIs that can pull the data directly into your favorite tools. The idea is to reduce the data handling burden on PIs and create a streamlined, automated process for accessing and using NES-LTER data.
 
