@@ -26,6 +26,6 @@ Data cleaning does not involve
 * Computing derived values
 * Doing QA/QC beyond correcting formatting issues
 
-The data team are not experts in your science and will not try to do any of it for you!
+The data team are not experts in your science and won't make assumptions about it that could invalidate your analyses.
 
 Our code for cleaning data is mostly contained in the [`nes-lter-ims` repository](https://github.com/nes-lter-ims). This code base will grow as we work on new data types and as new data is provided to us by PIs, and as we build out the REST API.
