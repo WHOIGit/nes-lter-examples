@@ -21,4 +21,11 @@ For data to be easily machine readable, it has to
 
 "Cleaning" data is the process of taking data that doesn't meet some of these criteria and reformatting or otherwise modifying it to meet the criteria. In addition to cleaning data after the fact, the things that have to be done to clean a particular dataset can serve as recommendations for formatting or structuring the dataset going forward.
 
+Data cleaning does not involve
+* Changing any data values
+* Computing derived values
+* Doing QA/QC beyond correcting formatting issues
+
+The data team are not experts in your science and will not try to do any of it for you!
+
 Our code for cleaning data is mostly contained in the [`nes-lter-ims` repository](https://github.com/nes-lter-ims). This code base will grow as we work on new data types and as new data is provided to us by PIs, and as we build out the web services API.
