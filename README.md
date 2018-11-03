@@ -12,7 +12,7 @@ In the code examples, data is read from this GitHub repository and visualized in
 
 ### What is "data cleaning"?
 
-For data to be easily machine readable, it has to
+For data to be easily machine readable and usable in a variety of tools, it has to
 * Be in a widely-supported, non-proprietary format (e.g., CSV, NetCDF)
 * Contain consistent types of values for a given variable (e.g., not putting words in a date column)
 * Link to other data through common variables (e.g., cruise/cast/niskin)
