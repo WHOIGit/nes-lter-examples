@@ -2,7 +2,7 @@
 urlwrite('https://raw.githubusercontent.com/WHOIGit/nes-lter-examples/master/data/neslter_sosik_chl.csv', 'local.csv');
 T = readtable('local.csv');
 
-% limit to cruise EN608 WSW samlples
+% limit to cruise EN608 WSW samples
 T = T(strcmp(T.cruise, 'EN608'),:);
 T = T(strcmp(T.filter_mesh_size, '>0'),:);
 
