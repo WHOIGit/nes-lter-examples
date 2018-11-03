@@ -2,7 +2,7 @@
 
 This repository contains [example data](data) from NES-LTER along with executable code for downloading and visualizing the data in [Python](notebooks), [R](R), and [MATLAB](MATLAB).
 
-The NES-LTER IMS is under development and its current capabilities include parsing "raw" data and producing cleaned-up CSV data that can be read by any programming language. Raw data includes both instrument data such as CTD bottle summary files, as well as PI-provided spreadsheets. (Some of this "raw" data is the result of some earlier processing but is considered "raw" from the perspective of the IMS because they require further processing to be immediately usable).
+The NES-LTER IMS is under development and its current capabilities include parsing "raw" data and producing cleaned-up CSV data that can be read by any programming language. Raw data includes both instrument data such as CTD bottle summary files, as well as PI-provided spreadsheets. (Some of this "raw" data is the result of some earlier processing but is considered "raw" from the perspective of the IMS because it requires further processing to be immediately usable).
 
 "Data cleaning" is the first part of the proposed data pipeline that would support queries and discovery, access to data, and export to external repositories, all through [RESTful web APIs](https://en.wikipedia.org/wiki/Representational_state_transfer) that can pull the data directly into your favorite tools. The idea is to reduce the data handling burden on PIs and other data users and create a streamlined, automated process for accessing and using NES-LTER data.
 
