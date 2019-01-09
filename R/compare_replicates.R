@@ -19,7 +19,12 @@ rep.b = df %>% filter(replicate == 'b')
 # now convert to wide form for plotting purposes
 merged <- merge(rep.a, rep.b, by=c('cruise','cast','niskin'))
 
+chl.x = merged['chl.x']
+chl.y = merged['chl.y']
+
 # make a scatter plot of replicate a against replicate b
-ggplot(merged, aes(x=chl.x, y=chl.y)) + geom_point() +
+p <- ggplot(merged, aes(x=chl.x, y=chl.y)) + geom_point() +
   xlab('Replicate A') +
   ylab('Replicate B')
+
+print(p)
