@@ -30,3 +30,18 @@ Data cleaning does not involve
 The data team are not experts in your science and won't make assumptions about it that could invalidate your analyses.
 
 Our code for cleaning data is mostly contained in the [`nes-lter-ims` repository](https://github.com/nes-lter-ims). This code base will grow as we work on new data types and as new data is provided to us by PIs, and as we build out the REST API.
+
+## Installation with Anaconda
+
+Download and install Anaconda and Jupyter
+
+If necessary, create a conda environment containing Jupyter and Python 3:
+
+```bash
+conda create --name my_env python=3 jupyter
+source activate my_env
+conda install --file requirements.txt
+jupyter notebook
+```
+
+Alternatively you can use the `nb_conda_kernels` extension to provision a kernel for these notebooks.
