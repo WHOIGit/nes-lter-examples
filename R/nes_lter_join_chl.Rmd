@@ -1,0 +1,41 @@
+---
+title: "LTER R data wrangling"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Load data
+
+read in the data, check out the structure, figure out what we've got.
+
+```{r}
+library(tidyverse)
+
+metadata <- read_csv("https://nes-lter-data.whoi.edu/api/ctd/en617/metadata.csv")
+chldata <- read_csv("https://nes-lter-data.whoi.edu/api/chl/en617.csv")
+
+str(metadata)
+str(chldata)
+metadata$cast
+chldata$cast
+length(unique(chldata$cast))
+```
+
+By looking at the data, I can see that there's only one cruise, and that cast is a unique identifier for each line of cruise metadata. It looks like the chlorophyl data was taken at 12 of the 35 stations, from multiple niskins, using multiple filter sizes, and replicates. 
+
+If we want the geographic location, date and nearest station, we can join the datasets on cast. There's no depth field, so I assume this metadata is available elsewhere (standard method?).
+
+# Join tables
+
+Join the metadata to samples in the chlorophyl data by cast. Many lines in the chl data have the same cast, so we need an inner join to replicate metadata appropriately. Since each line of chl data has a matching cast in the metadata, an inner join works. We could also use a left join. If there were lines without corresponding metadata, the inner join would drop them, but a left join will not.
+
+```{r}
+chl_meta <- inner_join(chldata, metadata, by = c("cruise", "cast"))
+# a left join is equivalent as long as there's a corresponding cast for each chl data line
+chl_meta_left <- left_join(chldata, metadata, by = "cast")
+head(chl_meta)
+```
+
+Now we know when and where our samples come from!
+
