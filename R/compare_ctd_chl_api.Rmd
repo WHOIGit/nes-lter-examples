@@ -1,0 +1,70 @@
+---
+title: "NES-LTER: Comparison between CTD and sampled chlorophyll concentration estimates"
+output: html_notebook
+---
+
+This notebook is an R translation of Joe Futrelle's python notebook that combines chlorophyll concentration estimates derived from a CTD-mounted fluorometer with corresponding estimates derived from lab processing of samples. This enables confirming that the estimates match, which aids in the decision of when to take samples.
+
+First, read chlorophyll and CTD data from the API
+
+```{r}
+library(tidyverse)
+
+BASE_URL = 'https://nes-lter-data.whoi.edu/api/'
+chl = read_csv(paste0(BASE_URL, 'chl/en608.csv'))
+btl = read_csv(paste0(BASE_URL, 'ctd/en608/bottles.csv'))
+```
+
+Take a look at the first few rows
+
+```{r}
+head(btl)
+```
+
+Samples are replicated, so the chlorophyll concentration needs to be averaged across those replicates. This uses a function called average_replicates
+
+```{r}
+average_replicates <- function(chl, replicates = c("a", "b"), var = 'chl') {
+  chl %>% 
+    group_by(cruise, cast, niskin, filter_size) %>%
+    filter(replicate %in% replicates) %>%
+    mutate(var_avg = mean(!!var))
+}
+```
+
+```{r}
+# use the above function (fails)
+chl_avg <- average_replicates(chl)
+
+# filter and average replicates inline
+chl_avg <-  chl %>% 
+    group_by(cruise, cast, niskin, filter_size) %>%
+    filter(replicate %in% c("a", "b")) %>%
+    summarize(chl = mean(chl))
+
+# now only include WSW
+chl_avg <- filter(chl_avg, filter_size == '>0')
+head(chl_avg)
+```
+
+Now the two datasets need to be collated so that they align on cruise, cast, and niskin bottle number.
+
+The column containing CTD-derived data is called fleco_afl and the one containing the sample-derived data is called chl.
+
+```{r}
+merged <- left_join(btl, chl_avg, by = c("cruise", "cast", "niskin"))
+head(merged)
+select(merged, cruise, cast, niskin, chl, fleco_afl, par) %>%
+  head()
+```
+
+Plot it up!
+
+```{r}
+ggplot(merged, aes(chl, fleco_afl, color = par)) +
+  geom_point() +
+  labs(title = "CHL concentration: CTD vs. sampled",
+       xlab = "sampled",
+       ylab = "CTD")
+```
+
