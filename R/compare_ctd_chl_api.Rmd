@@ -1,0 +1,78 @@
+---
+title: 'NES-LTER: Comparison between CTD and sampled chlorophyll concentration estimates'
+output:
+  html_document:
+    df_print: paged
+---
+
+This notebook is an R translation of Joe Futrelle's python notebook that combines chlorophyll concentration estimates derived from a CTD-mounted fluorometer with corresponding estimates derived from lab processing of samples. This enables confirming that the estimates match, which aids in the decision of when to take samples.
+
+First, read chlorophyll and CTD data from the API
+
+```{r}
+library(tidyverse)
+
+BASE_URL = 'https://nes-lter-data.whoi.edu/api/'
+chl = read_csv(paste0(BASE_URL, 'chl/en608.csv'))
+btl = read_csv(paste0(BASE_URL, 'ctd/en608/bottles.csv'))
+```
+
+Take a look at the first few rows
+
+```{r}
+head(btl)
+```
+
+Samples are replicated, so the chlorophyll concentration needs to be averaged across those replicates. This uses a function called average_replicates.
+
+Because dplyr uses non-standard evaluation, parameters passed into the function need to be specifically told when to be evaluated. The quo(), enquo(), quo_name(), and !! functions/operator  make this work, but it took a while to figure out!
+
+```{r}
+
+average_replicates <- function(chl, replicates = c("a", "b"), var = chl) {
+  # these functions tell dplyr that we don't want it to do it's handy NSE
+  # for the parameters we're passing
+  quo_var <- enquo(var)
+  var_name <- as_label(quo_var)
+  quo_rep <- enquo(replicates)
+  
+  # the !! and := let dplyr know exactly when and how to do it's NSE 'magic'
+  chl %>% 
+    group_by(cruise, cast, niskin, filter_size) %>%
+    filter(replicate %in% !!quo_rep) %>%
+    summarize(!!var_name := mean(!!quo_var))
+}
+```
+
+Now use the function to reduce our replicates and clean up a bit.
+
+```{r}
+# use the above function
+chl_avg <- average_replicates(chl)
+
+# now only include WSW
+chl_avg <- filter(chl_avg, filter_size == '>0')
+head(chl_avg)
+```
+
+Now the two datasets need to be collated so that they align on cruise, cast, and niskin bottle number.
+
+The column containing CTD-derived data is called fleco_afl and the one containing the sample-derived data is called chl.
+
+```{r}
+merged <- inner_join(chl_avg, btl, by = c("cruise", "cast", "niskin"))
+head(merged)
+select(merged, cruise, cast, niskin, chl, fleco_afl, par) %>%
+  head()
+```
+
+Plot it up!
+
+```{r}
+ggplot(merged, aes(chl, fleco_afl, color = par)) +
+  geom_point() +
+  labs(title = "CHL concentration: CTD vs. sampled",
+       xlab = "sampled",
+       ylab = "CTD")
+```
+
