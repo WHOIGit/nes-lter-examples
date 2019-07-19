@@ -69,10 +69,12 @@ select(merged, cruise, cast, niskin, chl, fleco_afl, par) %>%
 Plot it up!
 
 ```{r}
-ggplot(merged, aes(chl, fleco_afl, color = par)) +
-  geom_point() +
+ggplot(merged, aes(chl, fleco_afl, fill = par)) +
+  geom_point(shape = 21) +
+  scale_color_viridis_c(aesthetics = "fill") +
+  theme_bw() +
   labs(title = "CHL concentration: CTD vs. sampled",
-       xlab = "sampled",
-       ylab = "CTD")
+       x = "sampled",
+       y = "CTD")
 ```
 
